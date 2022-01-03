@@ -1,0 +1,11 @@
+.gridContainer {
+    height: 100vh;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.error {
+    color: red;
+}
