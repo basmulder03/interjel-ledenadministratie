@@ -30,10 +30,9 @@ const Auth: NextPage = () => {
         if (validateEmail(email) && validatePassword(password)) {
             try {
                 const user = await signInWithEmailAndPassword(auth, email, password);
-                console.log(user);
                 dispatch(changeLoggedInState(true));
             } catch (error: any) {
-                let errorMessage = ""
+                let errorMessage;
                 switch (error.code) {
                     case "auth/user-not-found":
                         errorMessage = "Dit email adres staat niet in de database, weet je zeker dat het de goede is?";

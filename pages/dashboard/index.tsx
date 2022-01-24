@@ -4,8 +4,9 @@ import {useRouter} from "next/router";
 import {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {changeLoggedInState, selectLoggedInState} from "../../redux/reducers/authSlice";
+import DashboardLayout from "../../components/DashboardLayout";
 
-const Dashboard: NextPage = () => {
+const Dashboard = () => {
     const auth = getAuth();
     const router = useRouter();
 
@@ -31,5 +32,11 @@ const Dashboard: NextPage = () => {
         </div>
     )
 }
+
+Dashboard.getLayout = (dashboard: NextPage) => (
+    <DashboardLayout>
+        {dashboard}
+    </DashboardLayout>
+)
 
 export default Dashboard;
