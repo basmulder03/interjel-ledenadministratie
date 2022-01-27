@@ -1,13 +1,12 @@
 import {NextPage} from 'next';
-import {getAuth, signOut} from "@firebase/auth";
 import {useRouter} from "next/router";
 import {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {changeLoggedInState, selectLoggedInState} from "../../redux/reducers/authSlice";
 import DashboardLayout from "../../components/DashboardLayout";
+import {supabase} from "../../supabase/initSupabase";
 
 const Dashboard = () => {
-    const auth = getAuth();
     const router = useRouter();
 
     const isLoggedIn = useAppSelector(selectLoggedInState);
@@ -22,7 +21,8 @@ const Dashboard = () => {
             <h1>Dashboard</h1>
             <button onClick={async () => {
                 try {
-                    await signOut(auth);
+                    const { error } = await supabase.auth.signOut();
+                    console.log(error);
                     dispatch(changeLoggedInState(false));
                 } catch (error) {
                     console.error(error);

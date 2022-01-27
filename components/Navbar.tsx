@@ -1,82 +1,56 @@
-import Link from "next/link";
-import NavItem from "./NavItem";
+import {Link} from "@mui/material";
+import {useState} from "react";
 
 const Navbar = () => {
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+    }
+
     return (
-        <nav className="bg-white border-gray-200 px-2 sm:px-4 py-2.5 dark:bg-gray-800">
-            <div className="container flex flex-wrap justify-between items-center mx-auto">
-                <Link href="/dashboard">
-                    <a className="flex">
-                    <span
-                        className="self-center text-lg font-semibold whitespace-nowrap dark:text-white">Interjel</span>
-                    </a>
-                </Link>
-                <div className="flex items-center md:order-2">
-                    <button type="button"
-                            className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                            id="user-menu-button" aria-expanded="false" data-dropdown-toggle="dropdown">
-                        <span className="sr-only">Open user menu</span>
-                        <img className="w-8 h-8 rounded-full"
-                             src="https://multisignaal.nl/wp-content/uploads/2021/08/blank-profile-picture-973460_1280.png"
-                             alt="user photo"/>
-                    </button>
-                    {/* <!-- Dropdown menu -->*/}
-                    <div
-                        className="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-                        id="dropdown">
-                        <div className="py-3 px-4">
-                            <span className="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
-                            <span
-                                className="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
+        <nav className="bg-white shadow-lg">
+            <div className="max-w-6xl mx-auto px-4">
+                <div className="flex justify-between">
+                    <div className="flex space-x-7">
+                        <div>
+                            {/* Website Logo */}
+                            <Link href="#" className="flex items-center py-4 px-2">
+                                <img src="/img/logo.png" alt="Logo" className="h-8 w-8 mr-2" />
+                                <span className="font-semibold text-gray-500 text-lg">Interjel</span>
+                            </Link>
                         </div>
-                        <ul className="py-1" aria-labelledby="dropdown">
-                            <li>
-                                <a href="#"
-                                   className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Dashboard</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Settings</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Earnings</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                   className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign
-                                    out</a>
-                            </li>
-                        </ul>
+                        {/* Primary Navbar items */}
+                        <div className="hidden md:flex items-center space-x-1">
+                            <Link className="py-4 px-2 text-green-500 border-b-4 border-green-500 font-semibold ">Home</Link>
+                            <Link className="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Services</Link>
+                            <Link className="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">About</Link>
+                            <Link className="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Contact Us</Link>
+                        </div>
                     </div>
-                    <button data-collapse-toggle="mobile-menu-2" type="button"
-                            className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                            aria-controls="mobile-menu-2" aria-expanded="false">
-                        <span className="sr-only">Open main menu</span>
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd"
-                                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                                  clipRule="evenodd"/>
-                        </svg>
-                        <svg className="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd"
-                                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                  clipRule="evenodd"/>
-                        </svg>
-                    </button>
+                    {/* Secondary Navbar items */}
+                    <div className="hidden md:flex items-center space-x-3 ">
+                        <Link className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">Log In</Link>
+                        <Link className="py-2 px-2 font-medium text-white bg-green-500 rounded hover:bg-green-400 transition duration-300">Sign Up</Link>
+                    </div>
+                    {/* Mobile menu button */}
+                    <div className="md:hidden flex items-center">
+                        <button className="outline-none mobile-menu-button" onClick={toggleMenu}>
+                            <svg className=" w-6 h-6 text-gray-500 hover:text-green-500 " x-show="!showMenu" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} viewBox="0 0 24 24" stroke="currentColor">
+                                <path d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-                <div className="hidden justify-between items-center w-full md:flex md:w-auto md:order-1"
-                     id="mobile-menu-2">
-                    <ul className="flex flex-col mt-4 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium">
-                        <NavItem active href="#">Home</NavItem>
-                        <NavItem href="#">About</NavItem>
-                        <NavItem href="#">Services</NavItem>
-                        <NavItem href="#">Pricing</NavItem>
-                        <NavItem href="#">Contact</NavItem>
-                    </ul>
-                </div>
+            </div>
+            {/* mobile menu */}
+            <div className={(menuOpen) ? "" : "hidden"}>
+                <ul>
+                    <li className="active"><Link href="index.html" className="block text-sm px-2 py-4 text-white bg-green-500 font-semibold">Home</Link></li>
+                    <li><Link href="#services" className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">Services</Link></li>
+                    <li><Link href="#about" className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">About</Link></li>
+                    <li><Link href="#contact" className="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">Contact Us</Link></li>
+                </ul>
             </div>
         </nav>
     )

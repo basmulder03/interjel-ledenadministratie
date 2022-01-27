@@ -1,13 +1,12 @@
 import {NextPage} from 'next';
-import {getAuth, signInWithEmailAndPassword} from "@firebase/auth";
 import {validateEmail, validatePassword} from "../../utils/Validators";
 import React, {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {changeLoggedInState, selectLoggedInState} from "../../redux/reducers/authSlice";
 import {useRouter} from "next/router";
+import {supabase} from "../../supabase/initSupabase";
 
 const Auth: NextPage = () => {
-    const auth = getAuth();
     const router = useRouter();
 
     const isLoggedIn = useAppSelector(selectLoggedInState);
@@ -28,25 +27,9 @@ const Auth: NextPage = () => {
         const password = event.currentTarget.password.value;
 
         if (validateEmail(email) && validatePassword(password)) {
-            try {
-                const user = await signInWithEmailAndPassword(auth, email, password);
-                dispatch(changeLoggedInState(true));
-            } catch (error: any) {
-                let errorMessage;
-                switch (error.code) {
-                    case "auth/user-not-found":
-                        errorMessage = "Dit email adres staat niet in de database, weet je zeker dat het de goede is?";
-                        break;
-                    case "auth/wrong-password":
-                        errorMessage = "Dit wachtwoord is onjuist.";
-                        break;
-                    default:
-                        errorMessage = "Oops! Er ging iets mis, probeer het later opnieuw.";
-                        console.warn(error.code);
-                        break;
-                }
-                setFirebaseError({ message: errorMessage, visible: true, blocking: true});
-            }
+            const {error} = await supabase.auth.signIn({email, password});
+            if (error === null) dispatch(changeLoggedInState(true));
+            else setFirebaseError({visible: true, blocking: true, message: error.message})
         } else {
             setFirebaseError({...firebaseError, blocking: true})
             !validateEmail(email) && setEmailError("Dit is geen valide email adres");
@@ -54,7 +37,7 @@ const Auth: NextPage = () => {
         }
     }
 
-    const unblockSubmit = () : void => {
+    const unblockSubmit = (): void => {
         if (firebaseError.blocking) setFirebaseError({...firebaseError, blocking: false});
     }
 
@@ -83,10 +66,11 @@ const Auth: NextPage = () => {
                     </div>
                     <div className="m-7">
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 my-4 rounded relative"
-                             role="alert" style={{ display: (firebaseError.visible) ? "block" : "none"}}>
+                             role="alert" style={{display: (firebaseError.visible) ? "block" : "none"}}>
                             <span className="block sm:inline">{firebaseError.message}</span>
                             <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
-                                <svg className="fill-current h-6 w-6 text-red-500" role="button" onClick={() => setFirebaseError({...firebaseError, visible: false})}
+                                <svg className="fill-current h-6 w-6 text-red-500" role="button"
+                                     onClick={() => setFirebaseError({...firebaseError, visible: false})}
                                      xmlns="http://www.w3.org/2000/svg"
                                      viewBox="0 0 20 20">
                                     <title>Close</title>
@@ -98,7 +82,8 @@ const Auth: NextPage = () => {
                             <div className="mb-6">
                                 <label htmlFor="email" className="block mb-2 text-sm text-gray-600 dark:text-gray-400">Email
                                     Address</label>
-                                <input type="email" name="email" id="email" placeholder="you@company.com" onChange={emailCheck}
+                                <input type="email" name="email" id="email" placeholder="you@company.com"
+                                       onChange={emailCheck}
                                        className={`w-full px-3 py-2 placeholder-gray-300 border rounded-md focus:outline-none focus:ring focus:ring-indigo-100 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:focus:ring-gray-900 ${(emailError === "") ? "border-gray-300 focus:border-indigo-300 dark:border-gray-600 dark:focus:border-gray-500" : "border-red-500 focus:border-red-700 dark:border-red-600 dark:focus:border-red-800"}`}/>
                                 <p className="text-red-500 text-xs italic">{emailError}</p>
                             </div>
@@ -119,7 +104,8 @@ const Auth: NextPage = () => {
                                 <button type="submit"
                                         disabled={(emailError !== "" || passwordError !== "" || firebaseError.blocking) || (!fieldsTouched.email || !fieldsTouched.password)}
                                         className={`w-full px-3 py-4 text-white ${!((emailError !== "" || passwordError !== "" || firebaseError.blocking) || (!fieldsTouched.email || !fieldsTouched.password)) ? "bg-indigo-600" : "bg-indigo-400"} rounded-md focus:bg-indigo-600 focus:outline-none`}
-                                >Sign in</button>
+                                >Sign in
+                                </button>
                             </div>
                         </form>
                     </div>
